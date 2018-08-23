@@ -147,57 +147,7 @@ testing = cleanPmlData[-inTrain, ]</code></pre>
 <pre class="r"><code>mod_rf &lt;- train(classe ~ ., data = training, method = &quot;rf&quot;, 
                 trControl=trainControl(method=&quot;cv&quot;,number=3))
 mod_lda &lt;- train(classe ~ ., data = training, method = &quot;lda&quot;)</code></pre>
-<pre><code>## Warning in lda.default(x, grouping, ...): variables are collinear
 
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear
-
-## Warning in lda.default(x, grouping, ...): variables are collinear</code></pre>
 <pre class="r"><code>pred_rf &lt;- predict(mod_rf, testing)
 pred_lda &lt;- predict(mod_lda, testing)
 predDF &lt;- data.frame(pred_rf, pred_lda, classe = testing$classe)
