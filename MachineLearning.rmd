@@ -1,0 +1,63 @@
+---
+title: "Machine Learning Project"
+author: "Samuel Pinkava"
+date: "August 23, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message = FALSE)
+```
+
+##Creating the cross-validation set
+
+First, I clean the data by getting rid of any columns with missing data.
+
+Second, I will combine any columns that are highly correlated.
+
+Then, I will split the training set into a training set and a testing set. 
+I will save the given testing set as a validation set at the end.
+
+```{r}
+library(caret)
+set.seed(82318)
+training_URL <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
+pmlData <- read.csv(training_URL,na.strings=c("NA",""))
+cleanPmlData <- pmlData[,complete.cases(t(pmlData))]
+inTrain = createDataPartition(cleanPmlData$classe, p = 0.3)[[1]]
+training = cleanPmlData[inTrain, ]
+testing = cleanPmlData[-inTrain, ]
+```
+
+##Creating the model
+To create the model, I will first use PCA to combine any columns that are
+highly correlated.
+
+Then, I am going to use the random forest, linear discriminant 
+analysis, and a combined model. I will then select whichever one is best.
+
+```{r}
+mod_rf <- train(classe ~ ., data = training, method = "rf", 
+                trControl=trainControl(method="cv",number=3))
+mod_lda <- train(classe ~ ., data = training, method = "lda")
+pred_rf <- predict(mod_rf, testing)
+pred_lda <- predict(mod_lda, testing)
+predDF <- data.frame(pred_rf, pred_lda, classe = testing$classe)
+combModFit <- train(classe ~ ., method = "rf", data = predDF)
+combPred <-  combPred <- predict(combModFit,predDF)
+```
+
+Next I find the accuracy of each model.
+
+```{r}
+confusionMatrix(pred_rf,testing$classe)$overall
+confusionMatrix(pred_lda,testing$classe)$overall
+confusionMatrix(combPred,testing$classe)$overall
+```
+
+As we can see, the linear discriminant analysis is the same as the combined model.
+We will therefore use LDA, as it is the simplest model.
+
+There is no need to do a cross validation, as the lda model was entirely decided 
+using the training set.
+
